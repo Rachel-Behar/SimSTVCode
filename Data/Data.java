@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import Entity.Entity;
-import Similarity.SimilarityMeasures;
 
 public class Data {
     // private static List<String[]> records;
@@ -16,7 +15,7 @@ public class Data {
     public static HashMap<Integer,ArrayList<Integer>> reps;
     public static int [] columns;
     public static int [] types;
-    public static float epsilon;
+    // public static float epsilon;
     private static List<HashMap<Integer,String>> hashCodesMap;
     public static Graph g=null;
     static float roundOff(float x, int position)
