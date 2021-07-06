@@ -1,5 +1,7 @@
 package Data;
-
+/**
+ * Axillary calss for finding duplicate teuples.
+ */
 class Tuple {
     float[] t;
     Tuple(float[] t){
@@ -16,14 +18,5 @@ class Tuple {
     @Override
     public int hashCode () {
         return java.util.Arrays.hashCode(t);
-//        float sum = 0;
-//        for (float i:t) sum += i;
-//
-//        return ((Float)sum).hashCode();
-//        final int prime = 31;
-//        float result = 1;
-//        for(float i:t)
-//            result = prime * result + i;
-//        return (int) result;
     }
 }

@@ -5,35 +5,42 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import Entity.Entity;
 
 public class Data {
-    // private static List<String[]> records;
-    public static List<float[]> values;
-    public static List<float[]> originalValues;
-    public static HashMap<Integer,ArrayList<Integer>> reps;
-    public static int [] columns;
-    public static int [] types;
-    // public static float epsilon;
-    private static List<HashMap<Integer,String>> hashCodesMap;
-    public static Graph g=null;
-    static float roundOff(float x, int position)
+    public static List<float[]> values;//list of meta items without duplicate tuples. each item is an array of floats. Non numeric values are assigned with hash-codes.
+    public static List<float[]> originalValues;//list of original tuples including duplicates 
+    public static HashMap<Integer,ArrayList<Integer>> reps;//hash table for matching meta items with original items they represent by id.
+    public static int [] columns;//similarity colums indexes 
+    public static int [] types;//types of similarity inexes. 1 for numeric, 0 for boolean.
+    private static List<HashMap<Integer,String>> hashCodesMap;//list of hash tables for boolean columns. hash table matched general values to hash-codes.
+    /**
+     * rounds x to the y decimal place
+     * @param x
+     * @param y
+     * @return rounded x
+     */
+    static float roundOff(float x, int y)//
     {
         float a = x;
-        double temp = Math.pow(10.0, position);
+        double temp = Math.pow(10.0, y);
         a *= temp;
         a = Math.round(a);
         return (a / (float)temp);
     }
-    public static void loadRecordsFromCSVFile(String fileName,int numOfLines,int[] columns, int [] types,int round)throws IOException{
-        loadRecordsFromCSVFile(fileName,numOfLines,columns,types,round,false,false);
-    }
-    
-    public static void loadRecordsFromCSVFile(String fileName,int numOfLines,int[] columns, int [] types,int round,boolean hasGraph,boolean hasHeadLine) throws IOException{
+    /**
+     * loads items from csv file
+     * @param fileName - name of dataset file (including path)
+     * @param numOfLines - number of items to read from file
+     * @param columns - similarity columns
+     * @param types - similarity columns types
+     * @param round - number of digits to round
+     * @param hasHeadLine - true if file as headline.
+     * @throws IOException
+     */
+    public static void loadRecordsFromCSVFile(String fileName,int numOfLines,int[] columns, int [] types,int round,boolean hasHeadLine) throws IOException{
         Data.columns=columns;
         Data.types=types;
-        // records = new ArrayList<>();
         values= new ArrayList<>();
         originalValues=new ArrayList<>();
         hashCodesMap=new ArrayList<>(columns.length);
@@ -43,69 +50,56 @@ public class Data {
         if(hasHeadLine)
             line= br.readLine();
         int[] hashCodes=new int[columns.length];
+
         for(int i=0;i<columns.length;i++){
-            if(columns[i]!=-1){
-                if(types[i]==0){
-                    stringtoIntMap.add(i,new HashMap<String,Integer>());
-                    stringtoIntMap.add(i,new HashMap<String,Integer>());
-                    hashCodesMap.add(i,new HashMap<Integer,String>());
-                    hashCodes[i]=0;
-                }
+            if(types[i]==0){
+                stringtoIntMap.add(i,new HashMap<String,Integer>());
+                stringtoIntMap.add(i,new HashMap<String,Integer>());
+                hashCodesMap.add(i,new HashMap<Integer,String>());
+                hashCodes[i]=0;
             }
         }
         while ((line = br.readLine()) != null && numOfLines>0) {
-            // String[] dataFields = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
             String[] dataFields = line.split(",");
-            // records.add(dataFields);
             float[] v=new float[columns.length];
             float[] v1=new float[columns.length];
             for(int i=0;i<columns.length;i++){
-                if(columns[i]!=-1){
-                    if(types[i]==1){
-                        String value=dataFields[columns[i]].replaceAll("-", "");
-                        if(value.equals("nan")){
-                            v[i]=0;
-                            v1[i]=0;
-                        }else{
-                            v[i]=roundOff(Float.parseFloat(value),round);
-                            v1[i]=Float.parseFloat(value);
-                            if (v[i] == Float.POSITIVE_INFINITY) {
-                                v[i] = 0;
-                                v1[i] = 0;
-                            }
-                        }
-                        // v[i]=roundOff(Float.parseFloat(dataFields[columns[i]]),round);
-                        // v1[i]=Float.parseFloat(dataFields[columns[i]]);
+                if(types[i]==1){
+                    String value=dataFields[columns[i]].replaceAll("-", "");
+                    if(value.equals("nan")){
+                        v[i]=0;
+                        v1[i]=0;
                     }else{
-                        String value=dataFields[columns[i]];
-                        if(stringtoIntMap.get(i).containsKey(value)){
-                            v[i]=stringtoIntMap.get(i).get(value);
+                        v[i]=roundOff(Float.parseFloat(value),round);
+                        v1[i]=Float.parseFloat(value);
+                        if (v[i] == Float.POSITIVE_INFINITY) {
+                            v[i] = 0;
+                            v1[i] = 0;
                         }
-                        else{
-                            stringtoIntMap.get(i).put(value, hashCodes[i]);
-                            hashCodesMap.get(i).put(hashCodes[i],value);
-                            v[i]=hashCodes[i];
-                            hashCodes[i]++;
-                        }
-                        v1[i]=v[i];
                     }
-                }
+                }else{
+                    String value=dataFields[columns[i]];
+                    if(stringtoIntMap.get(i).containsKey(value)){
+                        v[i]=stringtoIntMap.get(i).get(value);
+                    }
+                    else{
+                        stringtoIntMap.get(i).put(value, hashCodes[i]);
+                        hashCodesMap.get(i).put(hashCodes[i],value);
+                        v[i]=hashCodes[i];
+                        hashCodes[i]++;
+                    }
+                    v1[i]=v[i];
+                }   
             }
-            // System.out.println(v[0]+","+v[1]);
             values.add(v);
             originalValues.add(v1);
-            // System.out.println(values[4]);
             numOfLines--;
         }
         br.close();
-        if(hasGraph){
-            g=new Graph(fileName+".g");
-        }
-        // for(float[] v :values){
-        //     System.out.println(v[0]);
-        // }
-    //    originalValues=values;
     }
+    /**
+     * create meta items in values and save representatives lists in reps
+     */
     public static void getRepsForData(){
         
         HashMap<Tuple,Integer> tuples=new HashMap<>();
@@ -129,33 +123,38 @@ public class Data {
             
         }
         Data.values=tempValues;
-        // System.out.println("Actual num Of candidates: "+Data.size());
         Data.reps=reps;
-        //SimilarityMeasures.createSimTable(Data.size());
     }
-    // public static float getValue(int recNum, int col){
-    //     return Float.parseFloat(Data.records.get(recNum)[col]);
-    // }
+    /**
+     * returns values of specific item in specific columns
+     * @param recNum - id of item
+     * @param col - column number
+     * @return
+     */
     public static float getValueByRecNumCol(int recNum, int col){
         return Data.values.get(recNum)[col];
     }
-    // public static int getValueByRecNumColBool(int recNum, int col){
-    //     return (int) Data.values.get(recNum)[col];
-    // }
-    // public static float[] getColValues(int col){
-    //     float[] columnVals=new float[values.size()];
-    //     for(int i=0;i<columnVals.length;i++){
-    //         columnVals[i]=Data.values.get(i)[col];
-    //     }
-    //     return columnVals;
-    // }
+    /**
+     * get item from values by id
+     * @param recNum - id of item
+     * @return
+     */
     public static float[] getNumericRec(int recNum){
         return Data.values.get(recNum);
     }
-
+    /**
+     * get item as numeric tuple from originalValues by id (with hash-codes instead of boolean columns)
+     * @param recNum - id of item
+     * @return
+     */
     public static float[] getOriginalNumericRec(int recNum){
         return Data.originalValues.get(recNum);
     }
+    /**
+     * get original item tuple from originalValues by id
+     * @param recNum
+     * @return
+     */
     public static List<Object> getOriginalRec(int recNum){
         float[] rec =Data.originalValues.get(recNum);
         List<Object> originalRecord =new ArrayList<Object>();
@@ -171,23 +170,23 @@ public class Data {
         return originalRecord;
     }
 
-    // public static String[] getRecord(int recNum){
-    //     return Data.records.get(recNum);
-    // }
+    /**
+     * number of imtens in values
+     * @return
+     */
     public static int size(){
         return values.size();
     }
+    /**
+     * get meta voters enteties
+     */
     public static Entity[] getDynamicVotes( ){
-        // initRankers();
         Entity[] votes=new Entity[Data.size()];
-        // Entity[] votes=new DynamicVoteEntity[Data.size()];
         for(int can=0;can<Data.size();can++){
-            // votes[can]=new DynamicVoteEntity(can);
             int canRep=1;
             if(Data.reps!=null)
                 canRep= Data.reps.get(can).size();
             votes[can]=new Entity(can,canRep);
-            // topCount+=votes[can].topVote().size();
         }
         return votes;
     }  

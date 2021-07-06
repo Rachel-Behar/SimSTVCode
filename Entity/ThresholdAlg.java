@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
-
-import AttributeRanker.GraphAttRanker;
 import Data.Data;
 import Globals.Globals;
 import Similarity.SimilarityMeasures;
@@ -180,11 +178,7 @@ public class ThresholdAlg {
             for(int col=0;col<numOfCol;col++){
                 ArrayList<Integer> curTop=ColumnRankers.rankers[col].getNextCandidates();
                 if(curTop!=null){
-                    if(Data.columns[col]!=-1)
-                        newThreshold+=SimilarityMeasures.numericSim(Data.getValueByRecNumCol(curTop.get(0), col), n2[col]);
-                    else{
-                        newThreshold+=1/(1+((GraphAttRanker)ColumnRankers.rankers[col]).getDist());
-                    }
+                    newThreshold+=SimilarityMeasures.numericSim(Data.getValueByRecNumCol(curTop.get(0), col), n2[col]);
                     for(int can:curTop){
 
                         if (!Globals.isCandidate(can) || can == v.id){

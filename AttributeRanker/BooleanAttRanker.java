@@ -2,16 +2,21 @@ package AttributeRanker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import Data.Data;
-
+/**
+ * Ranker for boolean columns
+ */
 public class BooleanAttRanker implements AttributeRanker{
-    HashMap<Integer,ArrayList<Integer>> equivClass;
-    int hashVal;
-    int colIndex;
-    int next;
-    // boolean gotTop;
-    ArrayList<Integer> top=null;
+
+    HashMap<Integer,ArrayList<Integer>> equivClass;//hash table holding all hashvalues of the given attribute and lists of items with that hashvalue.
+    int hashVal;// current search hashvlue
+    int colIndex;// index of rankers column
+    int next;//the next value to be returnd
+    ArrayList<Integer> top=null;//list of items in the top
+    /**
+     * constructor
+     * @param colIndex - number of column
+     */
     public BooleanAttRanker(int colIndex){
         this.colIndex=colIndex;
         updateHashMap(colIndex);
@@ -38,10 +43,13 @@ public class BooleanAttRanker implements AttributeRanker{
     @Override
     public void init(int can) {
         hashVal=(int)Data.getValueByRecNumCol(can,colIndex);
-        // gotTop=false;
         top=equivClass.get(hashVal);
         next=0;
     }
+    /**
+     * update the equivClass hashMap to hold all hashcodes of items in column colIndex and the items that have that value
+     * @param colIndex - index of column
+     */
     private void updateHashMap(int colIndex) {
         equivClass=new HashMap<>();
         for(int i=0;i<Data.size();i++){

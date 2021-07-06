@@ -4,7 +4,7 @@ import java.text.NumberFormat;
 import java.util.*;
 
 import AttributeRanker.AttributeRanker;
-import AttributeRanker.NumericAttRanker.NumericAttRankerTree;
+import AttributeRanker.NumericAttRankerTree;
 import Data.Data;
 import Entity.Entity;
 import Globals.Globals;
@@ -32,7 +32,6 @@ public class STV {
         this.printProgress=printProgress;
         this.printStats=printStats;
         init(entites);
-        // System.out.println(entites[0].topVote());
         numOfCurrCan=Data.size();
     }
 
@@ -60,7 +59,6 @@ public class STV {
         }
         
         for (Entity v:entities){
-            // System.out.println(v.id+" count="+v.getCount()+" loss="+v.getLoss());
             argMax.add(new QEntryMax(v.id,v.getCount()));
             argMin.add(new QEntryMin(v.id,v.getCount(),v.getLoss()));
         }
@@ -77,10 +75,9 @@ public class STV {
         eliminated=0;
         float threshold = calcThreshold(numOfWinners,k);
         while(numOfWinners<k && Data.originalValues.size()-eliminated>k){
-            //System.out.println("winners = " + numOfWinners + ", losers = " + eliminated);
-            // if(System.currentTimeMillis()>timeout){
-            //     return null;
-            // }
+            if(System.currentTimeMillis()>timeout){
+                return null;
+            }
             int leader=getLeader(threshold);
             if (leader!=-1){
                 if(this.printProgress){

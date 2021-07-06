@@ -60,23 +60,15 @@ public class SimilarityMeasures{
 //        Float sim = simTable[rec1].get(rec2);
 //        if (sim != null) return sim;
 
-        float result = (sim(Data.getNumericRec(rec1), Data.getNumericRec(rec2))+graphSim(rec1,rec2))/Data.columns.length;
+        float result = (sim(Data.getNumericRec(rec1), Data.getNumericRec(rec2)))/Data.columns.length;
         //simTable[rec1].put(rec2, result);
         return result;
     }
 
     public static float simByOriginalRec(int rec1,int rec2){
-        return (sim(Data.getOriginalNumericRec(rec1), Data.getOriginalNumericRec(rec2))+graphSim(rec1,rec2))/Data.columns.length;
+        return (sim(Data.getOriginalNumericRec(rec1), Data.getOriginalNumericRec(rec2)))/Data.columns.length;
     }
 
-    public static float graphSim(int c1,int c2){
-        if(Data.g==null)
-            return 0;
-        int dist=Data.g.getDist(c1, c2);
-        if(dist==-1)
-            return 0;
-        return 1.0f/(1+dist);
-    }
     public static float numericSim(float n1,float n2){
         return 1/(1+Math.abs(n1-n2));
     }

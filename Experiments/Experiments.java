@@ -39,21 +39,21 @@ public class Experiments {
 
             int[] columns= {2,5,12};//columns number of columns: City, Avg. Cost, Rating 
             int[] types= {0,1,1};
-            Data.loadRecordsFromCSVFile("Datasets\\Zomato", numOfRecords, columns,types,2,false,true);
+            Data.loadRecordsFromCSVFile("Datasets\\Zomato", numOfRecords, columns,types,2,true);
             Data.getRepsForData();
             ColumnRankers.initRankers();
             runSTV(k,clacPropMeasures);      
     
             columns= new int[]{0,5};//columns number of columns: Bank Name, State 
             types= new int[]{0,0};
-            Data.loadRecordsFromCSVFile("Datasets\\Banks", numOfRecords, columns,types,2,false,true);
+            Data.loadRecordsFromCSVFile("Datasets\\Banks", numOfRecords, columns,types,2,true);
             Data.getRepsForData();
             ColumnRankers.initRankers();
             runSTV(k,clacPropMeasures);
             
             columns= new int[]{4,5};//columns number of columns: Latitude, Longitude
             types= new int[]{1,1};
-            Data.loadRecordsFromCSVFile("Datasets\\Accidents", numOfRecords, columns,types,1,false,true);
+            Data.loadRecordsFromCSVFile("Datasets\\Accidents", numOfRecords, columns,types,1,true);
             Data.getRepsForData();
             ColumnRankers.initRankers();
             runSTV (k,clacPropMeasures);
@@ -90,7 +90,7 @@ public class Experiments {
 
             int[] columns= {2,5,12};//columns number of columns: City, Avg. Cost, Rating 
             int[] types= {0,1,1};
-            Data.loadRecordsFromCSVFile("Datasets\\Zomato", numOfRecords, columns,types,2,false,true);
+            Data.loadRecordsFromCSVFile("Datasets\\Zomato", numOfRecords, columns,types,2,true);
             Data.getRepsForData();
             ColumnRankers.initRankers();
             runTopK(k,clacPropMeasures);
@@ -98,14 +98,14 @@ public class Experiments {
 
             columns= new int[]{0,5};//columns number of columns: Bank Name, State 
             types= new int[]{0,0};
-            Data.loadRecordsFromCSVFile("Datasets\\Banks", numOfRecords, columns,types,2,false,true);
+            Data.loadRecordsFromCSVFile("Datasets\\Banks", numOfRecords, columns,types,2,true);
             Data.getRepsForData();
             ColumnRankers.initRankers();
             runTopK(k,clacPropMeasures);
 
             columns= new int[]{4,5};//columns number of columns: Latitude, Longitude
             types= new int[]{1,1};
-            Data.loadRecordsFromCSVFile("Datasets\\Accidents", numOfRecords, columns,types,1,false,true);
+            Data.loadRecordsFromCSVFile("Datasets\\Accidents", numOfRecords, columns,types,1,true);
             Data.getRepsForData();
             ColumnRankers.initRankers();
             runTopK(k,clacPropMeasures);
@@ -147,7 +147,7 @@ public class Experiments {
             System.out.println("STV k="+k+" with Meta");
             runtimes=new ArrayList<String>();
             for(int n:numOfRecords){
-                Data.loadRecordsFromCSVFile(dataFile, n, columns,types,1,false,true);
+                Data.loadRecordsFromCSVFile(dataFile, n, columns,types,1,true);
                 Data.getRepsForData();
                 ColumnRankers.initRankers();
                 runSTV(k,false);
@@ -165,7 +165,7 @@ public class Experiments {
             System.out.println("STV k="+k+" without Meta");
             runtimes=new ArrayList<String>();
             for(int n:numOfRecords){
-                Data.loadRecordsFromCSVFile(dataFile, n, columns,types,6,false,true);
+                Data.loadRecordsFromCSVFile(dataFile, n, columns,types,6,true);
                 Data.reps=null;
                 ColumnRankers.initRankers();
                 runSTV(k,false);
@@ -199,7 +199,7 @@ public class Experiments {
             int[] types= {1,1};
   
             for(int i=0;i<round.length;i++){
-                Data.loadRecordsFromCSVFile(dataFile, numOfRecords, columns,types,round[i],false,true);
+                Data.loadRecordsFromCSVFile(dataFile, numOfRecords, columns,types,round[i],true);
                 Data.getRepsForData();
                 ColumnRankers.initRankers();
                 runSTV( k,true);
