@@ -1,10 +1,10 @@
 package Experiments;
 import Data.Data;
 import Entity.ColumnRankers;
-import Entity.Entity;
+import Entity.Item;
 import Experiments.Experiments;
-import Greedy.Greedy;
-import STV.STV;
+import Greedy.TopK;
+import STV.SimSTV;
 import Similarity.SimilarityMeasures;
 import Globals.Globals;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 
 public class Experiments {
-    static ArrayList<String> coordinates;
+    // static ArrayList<String> coordinates;
     static ArrayList<String> legend;
     static ArrayList<String> runtimes;
     static ArrayList<Float> bestRepResults;
@@ -229,13 +229,11 @@ public class Experiments {
     }
    
     private static void runSTV(int k, boolean calcRepMeasures) {
-        Globals.entities=null;
-        STV.numOfCurrCan=0;
-
+        Globals.items=null;
         Globals.start = System.currentTimeMillis();
-        Entity[] votes=Data.getDynamicVotes();
-        STV stv=new STV(votes, false,false);
-        ArrayList<Integer> result = stv.runSTV(k);
+        Item[] votes=Data.getDynamicVotes();
+        SimSTV stv=new SimSTV(votes);
+        ArrayList<Integer> result = stv.runSimSTV(k);
         if(result==null){
             runtimes.add("Timed Out");
             if(calcRepMeasures){
@@ -248,15 +246,15 @@ public class Experiments {
         NumberFormat formatter = new DecimalFormat("#0.00000");
         runtimes.add(formatter.format((Globals.end - Globals.start) / 1000d));
         if(calcRepMeasures){
-            bestRepResults.add(SimilarityMeasures.sim1(result));
-            propRepResults.add(SimilarityMeasures.propSim(result,10));
+            bestRepResults.add(SimilarityMeasures.bestRep(result));
+            propRepResults.add(SimilarityMeasures.propRep(result,10));
         }
     }
     private static void runTopK(int k, boolean calcRepMeasures) {
        
         Globals.start = System.currentTimeMillis();
 
-        Greedy t=new Greedy();
+        TopK t=new TopK();
         ArrayList<Integer> result =t.topK(k);
         if(result==null){
             runtimes.add("Timed Out");
@@ -270,8 +268,8 @@ public class Experiments {
         NumberFormat formatter = new DecimalFormat("#0.00000");
         runtimes.add(formatter.format((Globals.end - Globals.start) / 1000d));
         if(calcRepMeasures){
-            bestRepResults.add(SimilarityMeasures.sim1(result));
-            propRepResults.add(SimilarityMeasures.propSim(result,10));
+            bestRepResults.add(SimilarityMeasures.bestRep(result));
+            propRepResults.add(SimilarityMeasures.propRep(result,10));
         }
         
     } 

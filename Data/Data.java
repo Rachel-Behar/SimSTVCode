@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import Entity.Entity;
+import Entity.Item;
 
 public class Data {
     public static List<float[]> values;//list of meta items without duplicate tuples. each item is an array of floats. Non numeric values are assigned with hash-codes.
@@ -180,13 +180,13 @@ public class Data {
     /**
      * get meta voters enteties
      */
-    public static Entity[] getDynamicVotes( ){
-        Entity[] votes=new Entity[Data.size()];
+    public static Item[] getDynamicVotes( ){
+        Item[] votes=new Item[Data.size()];
         for(int can=0;can<Data.size();can++){
             int canRep=1;
             if(Data.reps!=null)
                 canRep= Data.reps.get(can).size();
-            votes[can]=new Entity(can,canRep);
+            votes[can]=new Item(can,canRep);
         }
         return votes;
     }  
