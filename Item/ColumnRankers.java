@@ -1,4 +1,4 @@
-package Entity;
+package Item;
 
 import AttributeRanker.AttributeRanker;
 import AttributeRanker.BooleanAttRanker;
