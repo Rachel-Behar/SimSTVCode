@@ -279,8 +279,8 @@ public class SimSTV {
         updateMinMaxRank(valuesChanged, lossChanged, changedCandidates);
     }
     /**
-     * 
-     * @param winners
+     * returns a list of winners by original item id. for each meta item winner, according to the number of coies of the winner randomly picks items fro represented list 
+     * @param winners - map of meta winners id and the number of copies they have
      * @return
      */
     private ArrayList<Integer> getListOfWinnersByOriginalID(HashMap<Integer, Integer> winners) {
@@ -301,7 +301,10 @@ public class SimSTV {
         }
         return results;
     }
-
+    /**
+     * adds all candidates left in the candidate pool to winners set
+     * @param winners - map of meta winners id and the number of copies they have
+     */
     private void addRestOfCandidates(HashMap<Integer, Integer> winners) {
         for(Item e:Globals.items){
             if(e.isCandidate()){
@@ -314,7 +317,11 @@ public class SimSTV {
             }
         }
     }
-
+    /**
+     * addes leader id to winners map
+     * @param winners - map of meta winners id and the number of copies they have
+     * @param leader - id of leader candidate to add to winners
+     */
     private void addWinner(HashMap<Integer, Integer> winners, int leader) {
         numOfWinners++;
         if(winners.containsKey(leader)){
@@ -323,11 +330,19 @@ public class SimSTV {
             winners.put(leader,1);
         }
     }
-    
+    /**
+     * axillary mthod: returns a random number between min and max
+     * @param min
+     * @param max
+     * @return
+     */
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
-
+    /**
+     * goes over all candidates c in top of voter v, and updates that v voted for c
+     * @param v - the voter
+     */
     private void updateInTopListOf(Item v) {
         if(v.topVote()!=null)
             for(int cand :v.topVote()){
@@ -336,14 +351,24 @@ public class SimSTV {
             }
             updateInNextListOf(v);
     }
-
+    /**
+     * goes over all candidates c in next of voter v, and updates that v voted for c in next
+     * @param v - the voter
+     */
     private void updateInNextListOf(Item v) {
         if(v.nextVote()!=null)
             for(int cand :v.nextVote()){
                 Globals.items[cand].addInNextListOf(v.id);
             }
     }
-
+    /**
+     * calculates the fraction of vote transfered for each voter that voted for leader
+     * @param leader - the leader candidate bing elected
+     * @param threshold - the vote count threshold
+     * @param leaderInTop - list of voters that have leader in top
+     * @param leaderInNext - list of voters that have leader in next
+     * @return fraction vote value
+     */
     protected float calcFrac(int leader, float threshold, List<Integer> leaderInTop, List<Integer> leaderInNext) {
         int numVoters=0;
         for (int c:leaderInTop) {
