@@ -1,6 +1,6 @@
 package Globals;
 
-import Entity.Item;
+import Item.Item;
 /**
  * Global variables
  */

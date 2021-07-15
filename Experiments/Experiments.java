@@ -1,9 +1,9 @@
 package Experiments;
 import Data.Data;
-import Entity.ColumnRankers;
-import Entity.Item;
 import Experiments.Experiments;
 import Greedy.TopK;
+import Item.ColumnRankers;
+import Item.Item;
 import STV.SimSTV;
 import Similarity.SimilarityMeasures;
 import Globals.Globals;
@@ -19,8 +19,7 @@ public class Experiments {
     static ArrayList<String> runtimes;
     static ArrayList<Float> bestRepResults;
     static ArrayList<Float> propRepResults;
-    // static int numOfRecords=3000000;
-    static int numOfRecords=3000;
+    static int numOfRecords=3000000;
 
     public static void runTestDifferentDatasets(){
         runTestDifferentDatasetsSTV(10,true);

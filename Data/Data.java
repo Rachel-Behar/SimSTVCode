@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import Entity.Item;
+
+import Item.Item;
 
 public class Data {
     public static List<float[]> values;//list of meta items without duplicate tuples. each item is an array of floats. Non numeric values are assigned with hash-codes.

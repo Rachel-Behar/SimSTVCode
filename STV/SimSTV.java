@@ -4,9 +4,9 @@ import java.util.*;
 import AttributeRanker.AttributeRanker;
 import AttributeRanker.NumericAttRankerTree;
 import Data.Data;
-import Entity.Item;
 import Globals.Globals;
-import Entity.ColumnRankers;
+import Item.ColumnRankers;
+import Item.Item;
 /**
  * runs SimSTV algorithm
  */
