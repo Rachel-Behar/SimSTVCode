@@ -1,7 +1,6 @@
 package Experiments;
 import Data.Data;
 import Experiments.Experiments;
-import Greedy.TopK;
 import Item.ColumnRankers;
 import Item.Item;
 import STV.SimSTV;
@@ -11,6 +10,9 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+
+import Basics.TopK;
+import Basics.KMeans.KMeans;
 
 
 public class Experiments {
@@ -247,6 +249,25 @@ public class Experiments {
         if(calcRepMeasures){
             bestRepResults.add(SimilarityMeasures.bestRep(result));
             propRepResults.add(SimilarityMeasures.propRep(result,10));
+        }
+    }
+    public static void runKMeans(int k, boolean calcRepMeasures) {
+        try {
+            // int numOfRecords=3000000;
+            int numOfRecords=1000;
+            k=10;
+            int[] columns= new int[]{4,5};//columns number of columns: Latitude, Longitude
+            int[] types= new int[]{1,1};
+            
+            Data.loadRecordsFromCSVFile("Datasets\\Accidents", numOfRecords, columns,types,1,true);
+            ColumnRankers.initRankers();
+            KMeans kmeans = new KMeans();
+            ArrayList<Integer> result=kmeans.kMeans(k);
+            System.out.println("best="+SimilarityMeasures.bestRep(result));
+            System.out.println("prop="+SimilarityMeasures.propRep(result,10));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
     private static void runTopK(int k, boolean calcRepMeasures) {

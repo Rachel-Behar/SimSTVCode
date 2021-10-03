@@ -47,11 +47,11 @@ public class Cluster {
 	public void plotCluster() {
 		System.out.println("[Cluster: " + id+"]");
 		System.out.println("[Centroid: " + centroid + "]");
-		System.out.println("[Points: \n");
-		for(Point p : points) {
-			System.out.println(p);
-		}
-		System.out.println("]");
+		// System.out.println("[Points: \n");
+		// for(Point p : points) {
+		// 	System.out.println(p);
+		// }
+		// System.out.println("]");
 	}
 
 }

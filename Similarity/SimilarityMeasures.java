@@ -12,7 +12,7 @@ public class SimilarityMeasures{
      * @param c2 - second item
      * @return
      */
-     static float sim(float[] c1, float[] c2) {
+     public static float sim(float[] c1, float[] c2) {
         float result=0;
         for (int i=0;i<c1.length;i++){
             if(Data.types[i]==0){//for boolean columns
