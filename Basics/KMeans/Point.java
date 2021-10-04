@@ -7,7 +7,7 @@ public class Point {
     public int id;
     protected float[] coordinates;
     private int cluster_number = 0;
-    float minDist;
+    float maxSim;
 
     public Point(int id, float[] coordinates)
     {
@@ -28,8 +28,8 @@ public class Point {
         return this.cluster_number;
     }
     
-    //Calculates the distance between two points.
-    protected static float distance(Point p, Point centroid) {
+    //Calculates the similarity between two points.
+    protected static float similarity(Point p, Point centroid) {
         return SimilarityMeasures.sim(p.coordinates, centroid.coordinates);
     }
     
@@ -50,6 +50,11 @@ public class Point {
     // }
     
     public String toString() {
-    	return "("+id+")";
+        String s=id+":(";
+        for(float f:this.coordinates){
+            s+=f+",";
+        }
+        s+=")";
+    	return s;
     }
 }

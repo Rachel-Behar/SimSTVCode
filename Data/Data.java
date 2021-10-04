@@ -107,11 +107,13 @@ public class Data {
         HashMap<Integer,ArrayList<Integer>> reps=new HashMap<>();
         List<float[]> tempValues=new ArrayList<>();;
         int numVotesInPractice=0;
+        // System.out.println("duplicates:");
         for(int can=0;can<Data.size();can++){
 
             float[] rec=Data.getNumericRec(can);
             Tuple recT=new Tuple(rec);
             if(tuples.containsKey(recT)){
+                // System.out.println(can);
                 int rep=tuples.get(recT);
                 reps.get(rep).add(can);
             }else{

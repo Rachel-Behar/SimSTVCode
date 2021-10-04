@@ -254,15 +254,32 @@ public class Experiments {
     public static void runKMeans(int k, boolean calcRepMeasures) {
         try {
             // int numOfRecords=3000000;
-            int numOfRecords=1000;
+            int numOfRecords=1000000;
             k=10;
             int[] columns= new int[]{4,5};//columns number of columns: Latitude, Longitude
             int[] types= new int[]{1,1};
             
             Data.loadRecordsFromCSVFile("Datasets\\Accidents", numOfRecords, columns,types,1,true);
             ColumnRankers.initRankers();
+            Globals.start = System.currentTimeMillis();
             KMeans kmeans = new KMeans();
             ArrayList<Integer> result=kmeans.kMeans(k);
+            Globals.end = System.currentTimeMillis();
+            System.out.println("k means:");
+            NumberFormat formatter = new DecimalFormat("#0.00000");
+            System.out.println("runtimes="+formatter.format((Globals.end - Globals.start) / 1000d));
+            System.out.println("best="+SimilarityMeasures.bestRep(result));
+            System.out.println("prop="+SimilarityMeasures.propRep(result,10));
+
+            Data.getRepsForData();
+            ColumnRankers.initRankers();
+            Globals.start = System.currentTimeMillis();
+            Item[] votes=Data.getDynamicVotes();
+            SimSTV stv=new SimSTV(votes);
+            result = stv.runSimSTV(k);
+            Globals.end = System.currentTimeMillis();
+            System.out.println("stv:");
+            System.out.println("runtimes="+formatter.format((Globals.end - Globals.start) / 1000d));
             System.out.println("best="+SimilarityMeasures.bestRep(result));
             System.out.println("prop="+SimilarityMeasures.propRep(result,10));
         } catch (IOException e) {

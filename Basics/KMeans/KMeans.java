@@ -48,9 +48,14 @@ public class KMeans {
     // }
 
 	private void initClusters() {
+        List<Integer> centroidIds=new ArrayList<Integer>();
         for (int i = 0; i < NUM_CLUSTERS; i++) {
      		Cluster cluster = new Cluster(i);
-     		Point centroid = new Point(points.get(getRandomIndex()));
+            int index=getRandomIndex();
+            while(centroidIds.contains(index))
+                index=getRandomIndex();
+            centroidIds.add(index);
+     		Point centroid = new Point(points.get(index));
     		cluster.setCentroid(centroid);
     		clusters.add(cluster);
     	}
@@ -65,12 +70,12 @@ public class KMeans {
         }
     }
 
-    private void plotClusters() {
-    	for (int i = 0; i < NUM_CLUSTERS; i++) {
-    		Cluster c = clusters.get(i);
-    		c.plotCluster();
-    	}
-    }
+    // private void plotClusters() {
+    // 	for (int i = 0; i < NUM_CLUSTERS; i++) {
+    // 		Cluster c = clusters.get(i);
+    // 		c.plotCluster();
+    // 	}
+    // }
     
 	//The process to calculate the K Means, with iterating method.
     private void calculate() {
@@ -86,7 +91,7 @@ public class KMeans {
         	
         	//Assign points to the closer cluster
         	assignCluster();
-            // plotClusters();
+            //plotClusters();
             //Calculate new centroids.
         	calculateCentroids();
         	
@@ -95,18 +100,15 @@ public class KMeans {
         	List<Point> currentCentroids = getCentroids();
         	
         	//Calculates total distance between new and old Centroids
-        	double distance = 0;
+        	finish = true;
         	for(int i = 0; i < lastCentroids.size(); i++) {
-        		distance += Point.distance(lastCentroids.get(i),currentCentroids.get(i));
+        		if(Point.similarity(lastCentroids.get(i),currentCentroids.get(i))<1)
+                    finish=false;
         	}
-        	System.out.println("#################");
-        	System.out.println("Iteration: " + iteration);
+        	// System.out.println("#################");
+        	// System.out.println("Iteration: " + iteration);
         	// System.out.println("Centroid distances: " + distance);
-        	// plotClusters();
-        	        	
-        	if(distance == 0) {
-        		finish = true;
-        	}
+        	//plotClusters();
         }
         getRepsFromClusters();
     }
@@ -114,15 +116,15 @@ public class KMeans {
     private ArrayList<Integer> getRepsFromClusters() {
         ArrayList<Integer> result=new ArrayList<Integer>();
         for(Cluster cluster : clusters) {
-            float minDist=Float.MAX_VALUE;
+            float maxSim=0;
             int id=-1;
             for(Point p:cluster.points){
-                float currDist=0;
+                float currSim=0;
                 for(Point p2:cluster.points){
-                    currDist+=Point.distance(p, p2);
+                    currSim+=Point.similarity(p, p2);
                 }
-                if (currDist<minDist){
-                    minDist=currDist;
+                if (currSim>maxSim){
+                    maxSim=currSim;
                     id=p.id;
                 }
             }
@@ -151,21 +153,23 @@ public class KMeans {
     	return centroids;
     }
     
-    private void assignCluster() {
-        float min = Float.MAX_VALUE; 
-        int cluster = 0;                 
+    private void assignCluster() {          
         for(Point point : points) {
-        	min =Float.MAX_VALUE; 
+        	float max = 0; 
+            int cluster = 0;
             for(int i = 0; i < NUM_CLUSTERS; i++) {
             	Cluster c = clusters.get(i);
-                float distance = Point.distance(point, c.getCentroid());
-                if(distance < min){
-                    min = distance;
+                if(point.id==94){
+                    point.id=94;
+                }
+                float similarity = Point.similarity(point, c.getCentroid());
+                if(similarity > max){
+                    max = similarity;
                     cluster = i;
                 }
             }
             point.setCluster(cluster);
-            point.minDist=min;
+            point.maxSim=max;
             clusters.get(cluster).addPoint(point);
         }
     }
@@ -187,17 +191,17 @@ public class KMeans {
                 cluster.centroid=new Point(-1,center);
             }
             else{
-                System.out.println("empty");
-                float maxDist = -1; 
+                System.out.println("empty"+cluster.getCentroid().id);
+                float minSim = 1; 
                 Point newCenter=null;
                 for(Point p:points){
-                    if(p.minDist>maxDist){
+                    if(p.maxSim<minSim){
                         newCenter=p;
-                        maxDist=newCenter.minDist;
+                        minSim=newCenter.maxSim;
                     }
                 }
                 cluster.centroid=newCenter;
-                newCenter.minDist=0;
+                newCenter.maxSim=0;
                 newCenter.setCluster(cluster.id);
                 cluster.points.add(newCenter);
             }
