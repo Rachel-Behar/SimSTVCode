@@ -253,9 +253,9 @@ public class Experiments {
     }
     public static void runKMeans(int k, boolean calcRepMeasures) {
         try {
-            // int numOfRecords=3000000;
-            int numOfRecords=1000000;
-            k=10;
+            int numOfRecords=3000000;
+            // int numOfRecords=1000000;
+            k=100;
             int[] columns= new int[]{4,5};//columns number of columns: Latitude, Longitude
             int[] types= new int[]{1,1};
             
@@ -269,7 +269,7 @@ public class Experiments {
             NumberFormat formatter = new DecimalFormat("#0.00000");
             System.out.println("runtimes="+formatter.format((Globals.end - Globals.start) / 1000d));
             System.out.println("best="+SimilarityMeasures.bestRep(result));
-            System.out.println("prop="+SimilarityMeasures.propRep(result,10));
+            System.out.println("prop="+SimilarityMeasures.propRep(result,1));
 
             Data.getRepsForData();
             ColumnRankers.initRankers();
@@ -281,7 +281,7 @@ public class Experiments {
             System.out.println("stv:");
             System.out.println("runtimes="+formatter.format((Globals.end - Globals.start) / 1000d));
             System.out.println("best="+SimilarityMeasures.bestRep(result));
-            System.out.println("prop="+SimilarityMeasures.propRep(result,10));
+            System.out.println("prop="+SimilarityMeasures.propRep(result,1));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

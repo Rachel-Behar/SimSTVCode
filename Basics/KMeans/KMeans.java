@@ -112,17 +112,17 @@ public class KMeans {
         }
         getRepsFromClusters();
     }
-    
     private ArrayList<Integer> getRepsFromClusters() {
         ArrayList<Integer> result=new ArrayList<Integer>();
         for(Cluster cluster : clusters) {
+            // System.out.println("cluster "+cluster.id);
             float maxSim=0;
             int id=-1;
             for(Point p:cluster.points){
-                float currSim=0;
-                for(Point p2:cluster.points){
-                    currSim+=Point.similarity(p, p2);
-                }
+                float currSim=p.maxSim;
+                // for(Point p2:cluster.points){
+                //     currSim+=Point.similarity(p, p2);
+                // }
                 if (currSim>maxSim){
                     maxSim=currSim;
                     id=p.id;
@@ -135,7 +135,31 @@ public class KMeans {
             }
         }
         return result;
-    }
+    }   
+    // private ArrayList<Integer> getRepsFromClusters() {
+    //     ArrayList<Integer> result=new ArrayList<Integer>();
+    //     for(Cluster cluster : clusters) {
+    //         System.out.println("cluster "+cluster.id);
+    //         float maxSim=0;
+    //         int id=-1;
+    //         for(Point p:cluster.points){
+    //             float currSim=0;
+    //             for(Point p2:cluster.points){
+    //                 currSim+=Point.similarity(p, p2);
+    //             }
+    //             if (currSim>maxSim){
+    //                 maxSim=currSim;
+    //                 id=p.id;
+    //             }
+    //         }
+    //         if(id!=-1){
+    //             result.add(id);
+    //         }else{
+    //             System.out.println("Empty Cluster "+cluster.id);
+    //         }
+    //     }
+    //     return result;
+    // }
 
     private void clearClusters() {
     	for(Cluster cluster : clusters) {
@@ -191,7 +215,7 @@ public class KMeans {
                 cluster.centroid=new Point(-1,center);
             }
             else{
-                System.out.println("empty"+cluster.getCentroid().id);
+                // System.out.println("empty"+cluster.getCentroid().id);
                 float minSim = 1; 
                 Point newCenter=null;
                 for(Point p:points){
