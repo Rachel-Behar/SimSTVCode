@@ -128,6 +128,34 @@ public class Data {
         Data.values=tempValues;
         Data.reps=reps;
     }
+    // public static void preproccessDataForKMeans(){
+        
+    //     HashMap<String,Integer> indexes=new HashMap<>();
+    //     int [] runningNumbers=new int[Data.]
+    //     int numVotesInPractice=0;
+    //     // System.out.println("duplicates:");
+    //     for(int can=0;can<Data.size();can++){
+    //         float[] rec=Data.getNumericRec(can);
+    //         for(int i=0;i<rec.length;i++){
+
+    //         }
+    //         Tuple recT=new Tuple(rec);
+    //         if(tuples.containsKey(recT)){
+    //             // System.out.println(can);
+    //             int rep=tuples.get(recT);
+    //             reps.get(rep).add(can);
+    //         }else{
+    //             tuples.put(recT, numVotesInPractice);
+    //             tempValues.add(rec);
+    //             reps.put(numVotesInPractice, new ArrayList<>());
+    //             reps.get(numVotesInPractice).add(can);
+    //             numVotesInPractice++;
+    //         }
+            
+    //     }
+    //     Data.values=tempValues;
+    //     Data.reps=reps;
+    // }
     /**
      * returns values of specific item in specific columns
      * @param recNum - id of item

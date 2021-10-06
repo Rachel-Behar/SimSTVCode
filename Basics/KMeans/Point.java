@@ -30,7 +30,8 @@ public class Point {
     
     //Calculates the similarity between two points.
     protected static float similarity(Point p, Point centroid) {
-        return SimilarityMeasures.sim(p.coordinates, centroid.coordinates);
+        // System.out.println(SimilarityMeasures.sim(p.coordinates, centroid.coordinates)/p.coordinates.length);
+        return SimilarityMeasures.sim(p.coordinates, centroid.coordinates)/p.coordinates.length;
     }
     
     // //Creates random point

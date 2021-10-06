@@ -16,6 +16,10 @@ import Basics.KMeans.KMeans;
 
 
 public class Experiments {
+    /**
+     *
+     */
+    private static final int propIterations = 10;
     // static ArrayList<String> coordinates;
     static ArrayList<String> legend;
     static ArrayList<String> runtimes;
@@ -26,8 +30,10 @@ public class Experiments {
     public static void runTestDifferentDatasets(){
         runTestDifferentDatasetsSTV(10,true);
         runTestDifferentDatasetsTopK(10,true);
+        runTestDifferentDatasetsKMeans(10);
         runTestDifferentDatasetsSTV(100,true);
         runTestDifferentDatasetsTopK(100,true);
+        runTestDifferentDatasetsKMeans(100);
         runTestDifferentDatasetsSTV(1000,false);
     }
     private static void runTestDifferentDatasetsSTV(int k, boolean clacPropMeasures){
@@ -251,37 +257,74 @@ public class Experiments {
             propRepResults.add(SimilarityMeasures.propRep(result,10));
         }
     }
-    public static void runKMeans(int k, boolean calcRepMeasures) {
+    public static void runTestDifferentDatasetsKMeans(int k) {
         try {
+            System.out.println("k-Means k="+k);
             int numOfRecords=3000000;
-            // int numOfRecords=1000000;
-            k=100;
-            int[] columns= new int[]{4,5};//columns number of columns: Latitude, Longitude
-            int[] types= new int[]{1,1};
+            bestRepResults= new ArrayList<Float>();
+            propRepResults= new ArrayList<Float>();
+            KMeans kmeans = new KMeans();
+
+            int[] columns= new int[141];//columns number of columns: Latitude, Longitude
+            int[] types= new int[141];
+            for(int i=0;i<141;i++){
+                columns[i]=i;
+                types[i]=1;
+            }
+            
+            Data.loadRecordsFromCSVFile("Datasets\\zomato_for_kmeans", numOfRecords, columns,types,1,true);
+
+            ArrayList<Integer> result1=kmeans.kMeans(k);
+            ArrayList<Integer> result2=kmeans.kMeans(k);
+            ArrayList<Integer> result3=kmeans.kMeans(k);
+            columns= new int[]{2,5,12};//columns number of columns: City, Avg. Cost, Rating 
+            types= new int[]{0,1,1};
+            Data.loadRecordsFromCSVFile("Datasets\\zomato", numOfRecords, columns,types,2,true);
+            bestRepResults.add((SimilarityMeasures.bestRep(result1)+SimilarityMeasures.bestRep(result2)+SimilarityMeasures.bestRep(result3))/3);
+            propRepResults.add((SimilarityMeasures.propRep(result1,propIterations)+SimilarityMeasures.propRep(result2,propIterations)+SimilarityMeasures.propRep(result3,propIterations))/3);
+            
+
+            columns= new int[1415];//columns number of columns: Latitude, Longitude
+            types= new int[1415];
+            for(int i=0;i<1415;i++){
+                columns[i]=i;
+                types[i]=1;
+            }
+            Data.loadRecordsFromCSVFile("Datasets\\Banks_for_kmeans", numOfRecords, columns,types,1,true);
+            result1=kmeans.kMeans(k);
+            result2=kmeans.kMeans(k);
+            result3=kmeans.kMeans(k);
+
+            columns= new int[]{0,5};//columns number of columns: Bank Name, State 
+            types= new int[]{0,0};
+            Data.loadRecordsFromCSVFile("Datasets\\Banks", numOfRecords, columns,types,2,true);
+            bestRepResults.add((SimilarityMeasures.bestRep(result1)+SimilarityMeasures.bestRep(result2)+SimilarityMeasures.bestRep(result3))/3);
+            propRepResults.add((SimilarityMeasures.propRep(result1,propIterations)+SimilarityMeasures.propRep(result2,propIterations)+SimilarityMeasures.propRep(result3,propIterations))/3);
+
+            columns= new int[]{4,5};//columns number of columns: Latitude, Longitude
+            types= new int[]{1,1};
             
             Data.loadRecordsFromCSVFile("Datasets\\Accidents", numOfRecords, columns,types,1,true);
-            ColumnRankers.initRankers();
             Globals.start = System.currentTimeMillis();
-            KMeans kmeans = new KMeans();
-            ArrayList<Integer> result=kmeans.kMeans(k);
+            kmeans = new KMeans();
+            result1=kmeans.kMeans(k);
+            result2=kmeans.kMeans(k);
+            result3=kmeans.kMeans(k);
             Globals.end = System.currentTimeMillis();
-            System.out.println("k means:");
-            NumberFormat formatter = new DecimalFormat("#0.00000");
-            System.out.println("runtimes="+formatter.format((Globals.end - Globals.start) / 1000d));
-            System.out.println("best="+SimilarityMeasures.bestRep(result));
-            System.out.println("prop="+SimilarityMeasures.propRep(result,1));
+            bestRepResults.add((SimilarityMeasures.bestRep(result1)+SimilarityMeasures.bestRep(result2)+SimilarityMeasures.bestRep(result3))/3);
+            propRepResults.add((SimilarityMeasures.propRep(result1,propIterations)+SimilarityMeasures.propRep(result2,propIterations)+SimilarityMeasures.propRep(result3,propIterations))/3);
 
-            Data.getRepsForData();
-            ColumnRankers.initRankers();
-            Globals.start = System.currentTimeMillis();
-            Item[] votes=Data.getDynamicVotes();
-            SimSTV stv=new SimSTV(votes);
-            result = stv.runSimSTV(k);
-            Globals.end = System.currentTimeMillis();
-            System.out.println("stv:");
-            System.out.println("runtimes="+formatter.format((Globals.end - Globals.start) / 1000d));
-            System.out.println("best="+SimilarityMeasures.bestRep(result));
-            System.out.println("prop="+SimilarityMeasures.propRep(result,1));
+
+            System.out.println("bestRep:");
+            System.out.print("(zomato,"+bestRepResults.get(0)+")");
+            System.out.print("(banks,"+bestRepResults.get(1)+")");
+            System.out.print("(accidents,"+bestRepResults.get(2)+")");
+            System.out.println();
+            System.out.println("propRep:");
+            System.out.print("(zomato,"+propRepResults.get(0)+")");
+            System.out.print("(banks,"+propRepResults.get(1)+")");
+            System.out.print("(accidents,"+propRepResults.get(2)+")");
+            System.out.println();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

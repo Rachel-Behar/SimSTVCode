@@ -130,9 +130,10 @@ public class KMeans {
             }
             if(id!=-1){
                 result.add(id);
-            }else{
-                System.out.println("Empty Cluster "+cluster.id);
             }
+            // else{
+            //     System.out.println("Empty Cluster "+cluster.id);
+            // }
         }
         return result;
     }   
