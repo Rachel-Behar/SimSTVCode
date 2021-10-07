@@ -1,4 +1,4 @@
-package Basics.KMeans;
+package Baselines.KMeans;
 
 import java.util.ArrayList;
 import java.util.List;

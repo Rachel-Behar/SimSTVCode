@@ -1,4 +1,4 @@
-package Basics.KMeans;
+package Baselines.KMeans;
 
 import Similarity.SimilarityMeasures;
 
