@@ -265,13 +265,13 @@ public class Experiments {
             propRepResults= new ArrayList<Float>();
             KMeans kmeans = new KMeans();
 
-            int[] columns= new int[141];//columns number of columns: Latitude, Longitude
+            int[] columns= new int[141];//number of columns in preproccessed file
             int[] types= new int[141];
             for(int i=0;i<141;i++){
                 columns[i]=i;
                 types[i]=1;
             }
-            
+            //file created by 'preproc.py'
             Data.loadRecordsFromCSVFile("Datasets\\zomato_for_kmeans", numOfRecords, columns,types,1,true);
 
             ArrayList<Integer> result1=kmeans.kMeans(k);
@@ -284,12 +284,13 @@ public class Experiments {
             propRepResults.add((SimilarityMeasures.propRep(result1,propIterations)+SimilarityMeasures.propRep(result2,propIterations)+SimilarityMeasures.propRep(result3,propIterations))/3);
             
 
-            columns= new int[1415];//columns number of columns: Latitude, Longitude
+            columns= new int[1415];//number of columns in preproccessed file
             types= new int[1415];
             for(int i=0;i<1415;i++){
                 columns[i]=i;
                 types[i]=1;
             }
+            //file created by 'preproc.py'
             Data.loadRecordsFromCSVFile("Datasets\\Banks_for_kmeans", numOfRecords, columns,types,1,true);
             result1=kmeans.kMeans(k);
             result2=kmeans.kMeans(k);

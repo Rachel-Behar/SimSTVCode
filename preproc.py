@@ -1,3 +1,5 @@
+# Preroccess script for kmeans input datasets with non-numeric attributes
+# each non-numeric att is translated into multipul columns where each column is associated with a single descreet values, and all columns get 0 except the column of the original values that gets 1. 
 import csv
 
 with open('Datasets/zomato.csv') as f:
