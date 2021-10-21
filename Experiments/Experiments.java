@@ -11,8 +11,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-import Basics.TopK;
-import Basics.KMeans.KMeans;
+import Baselines.TopK;
+import Baselines.KMeans.KMeans;
 
 
 public class Experiments {
